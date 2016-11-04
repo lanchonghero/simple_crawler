@@ -247,19 +247,19 @@ int CrawlerManager::StoreResult(Fetcher* fetcher, const UrlEntry* entry, const s
     }
   }
 
-	for (xmlNodePtr item = root->children; item != NULL; item = item->next) {
+  for (xmlNodePtr item = root->children; item != NULL; item = item->next) {
     std::string link = getsubnodetext(item, "link");
     std::string refer = getsubnodetext(item, "refer");
-		// std::string data = getsubnodetext(item, "data");
+    // std::string data = getsubnodetext(item, "data");
     if (!link.empty()) {
       UrlEntry* ue = new UrlEntry;
       ue->url = link;
       ue->refer = refer.empty() ? "" : refer;
       fetcher->PutUrlEntry(ue);
     }
-	}
+  }
 
-	xmlFreeDoc(doc);
+  xmlFreeDoc(doc);
   return 0;
 }
 

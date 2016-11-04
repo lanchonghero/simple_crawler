@@ -34,9 +34,9 @@ void Extracter::SetEncoding(const std::string& s)
 
 void Extracter::SetXtr(const std::string& s)
 {
-	std::ifstream f(s.c_str());
-	if (!f)
-		_ERROR_EXIT(-1, "[cannot open extracter file %s]", s.c_str());
+  std::ifstream f(s.c_str());
+  if (!f)
+    _ERROR_EXIT(-1, "[cannot open extracter file %s]", s.c_str());
   f.close();
 
   xslt_xtr = xsltParseStylesheetFile(BAD_CAST(s.c_str()));
