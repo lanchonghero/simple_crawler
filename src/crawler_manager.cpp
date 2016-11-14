@@ -243,7 +243,7 @@ int CrawlerManager::StoreResult(Fetcher* fetcher, const UrlEntry* entry, const s
       }
     }
     if (strcmp((const char *)item->name, "template") == 0) {
-      _INFO("template u %s t %s", entry->url.c_str(), getnodetext(item).c_str());
+      _INFO("template u %s t %s", UrlDecode(entry->url).c_str(), getnodetext(item).c_str());
     }
   }
 
@@ -287,11 +287,11 @@ int CrawlerManager::ExtractAndStore(Fetcher* fetcher, const UrlEntry* entry, Web
 
 int CrawlerManager::FetchWebPage(Fetcher* fetcher, const UrlEntry* entry, WebPage* wp)
 {
-  wp->url = entry->url;
+  wp->url = UrlDecode(entry->url);
   wp->refer = entry->refer;
   std::string ua = fetcher->GetUserAgent();
   std::string error;
-  int ret = Downloader::DownloadPage(wp->url, ua, wp->ip, wp->httpheader, wp->html, error);
+  int ret = Downloader::DownloadPage(UrlEncode(entry->url), ua, wp->ip, wp->httpheader, wp->html, error);
   if (ret == 0) {
     _INFO("fetch-ok c %d url %s", wp->GetCodeFromHttpHeader(), wp->url.c_str());
   } else {

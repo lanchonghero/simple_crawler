@@ -37,4 +37,7 @@ int gbk_to_utf8(const std::string& in, std::string& out);
 
 const std::string StringPrintf(const char* format, ...);
 
+std::string UrlEncode(const std::string& s);
+std::string UrlDecode(const std::string& s);
+
 #endif //_STRING_UTILS_H

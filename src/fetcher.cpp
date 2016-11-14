@@ -77,7 +77,8 @@ int Fetcher::InitUrllist()
       UrlEntry* entry = new UrlEntry();
       entry->url = line;
       entry->refer = "";
-      urllist.push_back(entry);
+      PutUrlEntry(entry);
+      // urllist.push_back(entry);
     }
     f.close();
   }
@@ -107,7 +108,8 @@ UrlEntry* Fetcher::GetUrlEntry()
 
 void Fetcher::PutUrlEntry(UrlEntry* entry)
 {
-  if (entry)
+  if (entry) {
     urllist.push_back(entry);
+  }
   return;
 }
