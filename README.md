@@ -17,8 +17,8 @@ Dependence
 
     apt-get install libxslt1-dev libcurl4-openssl-dev libpcre3-dev
 
-Use Simple Crawler to crawl web page
-------------------------------------
+Configuration
+-------------
 The configuration is necessary. Some examples lists in conf path.
 * fetcher-example.ini
 * db-example.ini
@@ -28,13 +28,14 @@ The configuration is necessary. Some examples lists in conf path.
 `fetcher-example.ini` is the crawler configuration. It can specify multiple
 crawler to crawl different pages by define different section such as:
 
-    [section1]
+    [book_fetcher_section1]
     "delay"="1s"
-    "seed"="http://www.tadu.com/store/0-a-0-0-a-10-p-1"
-    [section2]
-    "delay"="500ms"
-    "seedpath"="data/base/seed.txt"
-    "scheduling"="FIFO"
+    "seed"="http://a.qidian.com/?page=1"
+
+    # [book_fetcher_section2]
+    # "delay"="500ms"
+    # "seedpath"="data/base/seed.txt"
+    # "scheduling"="FIFO"
 
 - delay
 
@@ -59,7 +60,7 @@ crawler to crawl different pages by define different section such as:
 `db-example.ini` describe database configuration. It can also config multiple
 database by using different section name.
 
-    [database1]
+    [book]
     "host"="127.0.0.1"
     "port"="3306"
     "user"="mysql"
@@ -103,10 +104,10 @@ customize your domain and url regex to restrict pages to use this extraction
 rule. A extraction rule can be set in your xsl file so that you can extract
 content from web page by your customization and store it in database.
 
-    [book-extracter]
-    "domain"="www.tadu.com"
-    "urlre"="^http://www\.tadu\.com/store/0-a-0-0-a-10-p-\d+$"
-    "xtr"="data/base/book-extracter.xsl"
+    [book_extracter]
+    "domain"="qidian.com"
+    "urlre"="^http://a\.qidian\.com/\?page=\d+$"
+    "xtr"="data/base/qidian-result.xsl"
 
 - domain
 
@@ -120,4 +121,5 @@ content from web page by your customization and store it in database.
 
 - xtr
 
-    xsl file of the extraction rule.
+    xsl file of the extraction rule. An example xsl file to extract result
+    list in data/base/. You can see it and learn how to use it to extract.
