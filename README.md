@@ -57,6 +57,7 @@ crawler to crawl different pages by define different section such as:
 - scheduling
 
     schedule strategy of crawling.
+
     FIFO -- first in first out
     FILO -- first in last out. By default.
 
