@@ -15,17 +15,11 @@ Dependence
 * libcurl
 * libpcre
 
-    apt-get install libmysqlclient-dev libxml2
+On ubuntu:
 
-    apt-get install libxslt1-dev libcurl4-openssl-dev libpcre3-dev
+    sudo apt-get install libmysqlclient-dev libxml2
 
-Compiler
---------
-[CMake][cmake-org] is an open-source, cross-platform family of tools
-designed to build, test and package software. 
-
-[cmake-org]:https://cmake.org/
-
+    sudo apt-get install libxslt1-dev libcurl4-openssl-dev libpcre3-dev
 
 Configuration
 -------------
@@ -134,6 +128,22 @@ content from web page by your customization and store it in database.
     xsl file of the extraction rule. An example xsl file to extract result
     list in data/base/. You can see it and learn how to use it to extract.
 
+Building
+--------
+[CMake][] is a C++ Makefiles/Solution generator. It is usually available on most
+Linux system as package. On Ubuntu:
+
+    sudo apt-get install cmake
+
+From the command-line on Unix in the source directory:
+
+    mkdir release
+    cd release
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    make
+
+[CMake]: http://www.cmake.org
+
 How to use
 ----------
 You need to create a database and a table to store result in your mysql server.
@@ -141,9 +151,4 @@ Create database test for example: `CREATE DATABASE test;`. And then create a
 table in test. Sql can be found in data/base/create.sql. Enter in your Simple
 Crawler project directory next.
 
-    mkdir release;
-    cd release;
-    cmake -DCMAKE_BUILD_TYPE=Release ../;
-    make;
-    cd ..;
     ./release/bin/simple_crawler -f conf/fetcher-example.ini -d conf/db-example.ini -x conf/xtrt-example.ini
