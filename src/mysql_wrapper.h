@@ -1,7 +1,7 @@
 #ifndef _MYSQL_WRAPPER_H
 #define _MYSQL_WRAPPER_H
 
-#include <mysql/mysql.h>
+#include <mysql.h>
 #include <string>
 #include <vector>
 
