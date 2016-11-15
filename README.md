@@ -21,7 +21,7 @@ Dependence
 
 Compiler
 --------
-[cmake][cmake-org] CMake is an open-source, cross-platform family of tools
+[CMake][cmake-org] is an open-source, cross-platform family of tools
 designed to build, test and package software. 
 
 [cmake-org]:https://cmake.org/
