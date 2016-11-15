@@ -23,22 +23,20 @@ The configuration is necessary. Some examples lists in conf path.
 * db-example.ini
 * xtrt-example.ini
 
-"fetcher-example.ini" is the crawler configuration. It can specify multiple
+`fetcher-example.ini` is the crawler configuration. It can specify multiple
 crawler to crawl different pages by define different section such as:
 
-[section1]
-"delay"="1s"
-"seed"="http://www.tadu.com/store/0-a-0-0-a-10-p-1"
-[section2]
-"delay"="500ms"
-"seedpath"="data/base/seed.txt"
-"scheduling"="FIFO"
+    [section1]
+    "delay"="1s"
+    "seed"="http://www.tadu.com/store/0-a-0-0-a-10-p-1"
+    [section2]
+    "delay"="500ms"
+    "seedpath"="data/base/seed.txt"
+    "scheduling"="FIFO"
 
 - delay
-
-sepcify time interval to crawl specific page.
-support s/ms/us (second/millisecond/microsecond) default 1s
-
+    sepcify time interval to crawl specific page.
+    support s/ms/us (second/millisecond/microsecond) default 1s
 - seed
 
 the seed of the page to be crawled
