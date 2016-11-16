@@ -17,7 +17,7 @@ Dependence
 
 On ubuntu:
 
-    sudo apt-get install libmysqlclient-dev libxml2
+    sudo apt-get install libmysqlclient-dev libxml2-dev
 
     sudo apt-get install libxslt1-dev libcurl4-openssl-dev libpcre3-dev
 
