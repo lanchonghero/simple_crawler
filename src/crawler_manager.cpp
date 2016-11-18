@@ -66,14 +66,15 @@ int CrawlerManager::InsertFetcher(Fetcher* f)
   return 0;
 }
 
-int CrawlerManager::CreateSingleUrlFetcher(const std::string& url)
+int CrawlerManager::CreateSingleUrlFetcher(const std::string& seed, const std::string& delay, const std::string& scheduling)
 {
   Fetcher* f = new Fetcher();
 
-  std::string _url = url;
-  f->SetSeed(trimc(_url, '"'));
+  std::string url = seed;
+  f->SetSeed(trimc(url, '"'));
   f->SetUserAgent(DEFAULT_USERAGENT);
-  f->SetDelay("1s");
+  f->SetDelay(delay);
+  f->SetScheduling(scheduling);
   InsertFetcher(f);
   return 0;
 }
@@ -247,28 +248,16 @@ int CrawlerManager::StoreResult(Fetcher* fetcher, const UrlEntry* entry, const s
   }
   xmlNodePtr root = xmlDocGetRootElement(doc);
   for (xmlNodePtr item = root->children; item != NULL; item = item->next) {
-    if (m_database_config.empty()) {
-      // no need to store result
-    } else {
-      std::string db_name = getsubnodetext(item, "type");
-      if (m_databases.find(db_name) != m_databases.end()) {
-        MysqlWrapper* db = m_databases[db_name];
-        if (db) {
-          SaveItem(db, item);
-        }
+    std::string db_name = getsubnodetext(item, "type");
+    if (m_databases.find(db_name) != m_databases.end()) {
+      MysqlWrapper* db = m_databases[db_name];
+      if (db) {
+        SaveItem(db, item);
       }
     }
     if (strcmp((const char *)item->name, "template") == 0) {
       _INFO("template u %s t %s", UrlDecode(entry->url).c_str(), getnodetext(item).c_str());
     }
-  }
-
-  // for single url fetch and extract test:
-  // no need to extract next hop
-  // print extract xml here
-  if (m_fetcher_config.empty()) {
-    fprintf(stdout, "%s\n", xmlret.c_str());
-    return 0;
   }
 
   for (xmlNodePtr item = root->children; item != NULL; item = item->next) {
@@ -302,7 +291,17 @@ int CrawlerManager::ExtractAndStore(Fetcher* fetcher, const UrlEntry* entry, Web
   std::string xmlret;
   if (e && e->DoExtract(*wp, xmlret)) {
     _INFO("extract-ok url %s", wp->url.c_str());
-    StoreResult(fetcher, entry, xmlret);
+
+    // for single url fetch and extract test:
+    // print extract xml here
+    if (m_fetcher_config.empty() && m_database_config.empty()) {
+      fprintf(stdout, "%s\n", xmlret.c_str());
+    }
+
+    // no need to store if unset database config
+    if (!m_database_config.empty()) {
+      StoreResult(fetcher, entry, xmlret);
+    }
     return 0;
   }
   _ERROR("extract-fail url %s", wp->url.c_str());

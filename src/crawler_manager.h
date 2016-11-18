@@ -18,8 +18,7 @@ public:
   CrawlerManager() {}
   virtual ~CrawlerManager();
 
-  int InsertFetcher(Fetcher* f);
-  int CreateSingleUrlFetcher(const std::string& url);
+  int CreateSingleUrlFetcher(const std::string& seed, const std::string& delay, const std::string& scheduling);
 
   int InitFetchers(const std::string& configuration);
   int InitDatabases(const std::string& configuration);
@@ -36,6 +35,9 @@ public:
   int ExecFetcher(Fetcher* fetcher);
 
   void Run();
+
+private:
+  int InsertFetcher(Fetcher* f);
 
 private:
   std::map<std::string, Fetcher*> m_fetchers;

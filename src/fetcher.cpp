@@ -64,7 +64,8 @@ int Fetcher::InitUrllist()
     UrlEntry* entry = new UrlEntry();
     entry->url = seed;
     entry->refer = "";
-    urllist.push_back(entry);
+    PutUrlEntry(entry);
+    // urllist.push_back(entry);
   }
 
   if (!seedpath.empty()) {

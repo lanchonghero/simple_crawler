@@ -4,6 +4,9 @@
 #include <string>
 #include "crawler_manager.h"
 
+#define DEFAULT_CMD_DELAY          "1s"
+#define DEFAULT_CMD_SCHEDULING     "FILO"
+
 void usage(const char* bin_name)
 {
   printf("Usage:\n");
@@ -12,8 +15,11 @@ void usage(const char* bin_name)
   printf("  -h:             Show help messages.\n");
   printf("  -f file:        fetcher configuration file.\n");
   printf("  -d file:        database configuration file.\n");
-  printf("  -x file:        extracter configuration file.\n");
-  printf("  -u file:        single url to cralw/extract/store. No need -f.\n");
+  printf("  -x file:        extracter configuration file.\n\n");
+  printf("You can use next options to create a single fetcher for specific url seed only when option -f is not set.\n");
+  printf("  -U url:                 single fetcher url seed. No need -f.\n");
+  printf("  -D time:                single fetcher delay time between to url entry. Support s/ms/us Default[%s].\n", DEFAULT_CMD_DELAY);
+  printf("  -S schedule stragety:   single fetcher schedule stragety to cralw. Options:[FIFO|FILO] Default[%s].\n", DEFAULT_CMD_SCHEDULING);
 }
 
 int main(int argc, char** argv)
@@ -21,9 +27,11 @@ int main(int argc, char** argv)
   const char *fetcher_config = NULL;
   const char *database_config = NULL;
   const char *extracter_config = NULL;
-  const char *url = NULL;
+  const char *seed  = NULL;
+  const char *delay = DEFAULT_CMD_DELAY;
+  const char *scheduling = DEFAULT_CMD_SCHEDULING;
   char opt_char;
-  while ((opt_char = getopt(argc, argv, "f:d:x:u:h")) != -1) {
+  while ((opt_char = getopt(argc, argv, "f:d:x:U:D:S:h")) != -1) {
     switch (opt_char) {
     case 'f':
       fetcher_config = optarg;
@@ -34,8 +42,14 @@ int main(int argc, char** argv)
     case 'x':
       extracter_config = optarg;
       break;
-    case 'u':
-      url = optarg;
+    case 'U':
+      seed = optarg;
+      break;
+    case 'D':
+      delay = optarg;
+      break;
+    case 'S':
+      scheduling = optarg;
       break;
     case 'h':
       usage(argv[0]);
@@ -47,12 +61,12 @@ int main(int argc, char** argv)
   }
 
   CrawlerManager* cm = new CrawlerManager();
-  if (url) {
+  if (seed) {
     if (fetcher_config) {
       usage(argv[0]);
       goto error_return;
     } else {
-      cm->CreateSingleUrlFetcher(url);
+      cm->CreateSingleUrlFetcher(seed, delay, scheduling);
     }
   }
 
