@@ -8,9 +8,6 @@
 #include "str2id.h"
 #include "log.h"
 
-#define DEFAULT_USERAGENT "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:13.0) Gecko/20100101 Firefox/13.0.1"
-
-
 static xmlNodePtr getsubnode(const xmlNodePtr parent, const std::string& name)
 {
   xmlNodePtr node = parent->children;
@@ -61,6 +58,26 @@ CrawlerManager::~CrawlerManager()
       delete it_e->second;
 }
 
+int CrawlerManager::InsertFetcher(Fetcher* f)
+{
+  if (!f) return -1;
+  m_fetchers[f->GetName()] = f;
+  m_fetchers_name.push_back(f->GetName());
+  return 0;
+}
+
+int CrawlerManager::CreateSingleUrlFetcher(const std::string& url)
+{
+  Fetcher* f = new Fetcher();
+
+  std::string _url = url;
+  f->SetSeed(trimc(_url, '"'));
+  f->SetUserAgent(DEFAULT_USERAGENT);
+  f->SetDelay("1s");
+  InsertFetcher(f);
+  return 0;
+}
+
 int CrawlerManager::InitFetchers(const std::string& configuration)
 {
   m_fetcher_config = configuration;
@@ -90,8 +107,7 @@ int CrawlerManager::InitFetchers(const std::string& configuration)
     fetcher->SetUserAgent(useragent);
     fetcher->SetScheduling(scheduling);
 
-    m_fetchers[sections[i]] = fetcher;
-    m_fetchers_name.push_back(sections[i]);
+    InsertFetcher(fetcher);
   }
 
   return 0;
@@ -245,6 +261,14 @@ int CrawlerManager::StoreResult(Fetcher* fetcher, const UrlEntry* entry, const s
     if (strcmp((const char *)item->name, "template") == 0) {
       _INFO("template u %s t %s", UrlDecode(entry->url).c_str(), getnodetext(item).c_str());
     }
+  }
+
+  // for single url fetch and extract test:
+  // no need to extract next hop
+  // print extract xml here
+  if (m_fetcher_config.empty()) {
+    fprintf(stdout, "%s\n", xmlret.c_str());
+    return 0;
   }
 
   for (xmlNodePtr item = root->children; item != NULL; item = item->next) {

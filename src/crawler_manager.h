@@ -10,11 +10,16 @@
 #include "extracter.h"
 #include "webpage.h"
 
+#define DEFAULT_USERAGENT "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:13.0) Gecko/20100101 Firefox/13.0.1"
+
 class CrawlerManager
 {
 public:
   CrawlerManager() {}
   virtual ~CrawlerManager();
+
+  int InsertFetcher(Fetcher* f);
+  int CreateSingleUrlFetcher(const std::string& url);
 
   int InitFetchers(const std::string& configuration);
   int InitDatabases(const std::string& configuration);
